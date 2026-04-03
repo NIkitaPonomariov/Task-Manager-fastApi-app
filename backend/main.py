@@ -23,6 +23,12 @@ class TaskSchema(BaseModel):
 class TaskCreateSchema(BaseModel):
     title: str
 
+
+class TaskUpdateSchema(BaseModel):
+    title: str | None = None
+    complete: bool | None = None
+
+
 tasks: list[TaskSchema] = []
 
 
@@ -38,3 +44,11 @@ def create_task(payload: TaskCreateSchema) -> TaskSchema:
     tasks.append(new_task)
     return new_task
 
+
+@app.patch("/tasks/{task_id}")
+def update_task(task_id: str, payload: TaskUpdateSchema) -> TaskUpdateSchema:
+    for task in tasks:
+        if task.id == task_id:
+            task.title = payload.title if payload.title else task.title
+            task.complete = payload.complete if payload.complete else task.complete
+            return task
