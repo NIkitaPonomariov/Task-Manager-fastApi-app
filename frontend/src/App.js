@@ -285,13 +285,13 @@ function App() {
               </div>
 
               <div className="stats">
-                <span className="stat-pill">Всего: {tasks.length}</span>
-                <span className="stat-pill">Активных: {pendingCount}</span>
-                <span className="stat-pill">Готово: {completedCount}</span>
+                <span className="stat-pill">Total: {tasks.length}</span>
+                <span className="stat-pill">Active: {pendingCount}</span>
+                <span className="stat-pill">Completed: {completedCount}</span>
               </div>
 
               {tasks.length === 0 ? (
-                <div className="empty-state">Пока пусто. Добавьте первую задачу выше.</div>
+                <div className="empty-state">It’s empty for now. Add your first task above.</div>
               ) : (
                 <ul>
                   {tasks.map((task, index) => (
@@ -314,10 +314,10 @@ function App() {
 
                       <div className="task-actions">
                         <button className="btn" onClick={() => handleTaskEdit(task)} type="button">
-                          Изменить
+                          Change
                         </button>
                         <button className="btn btn-danger" onClick={() => handleTaskDelete(task.id)} type="button">
-                          Удалить
+                          Delete
                         </button>
                       </div>
                     </li>
@@ -360,16 +360,16 @@ function App() {
               <div className="tasks-header">
                 <h2>Список категорий</h2>
                 <button className="btn" onClick={fetchCategories} type="button">
-                  Обновить
+                  Update
                 </button>
               </div>
 
               <div className="stats">
-                <span className="stat-pill">Всего: {categories.length}</span>
+                <span className="stat-pill">Total: {categories.length}</span>
               </div>
 
               {categories.length === 0 ? (
-                <div className="empty-state">Категорий пока нет.</div>
+                <div className="empty-state">No categories yet.</div>
               ) : (
                 <ul className="category-list">
                   {categories.map((category, index) => (
@@ -383,14 +383,14 @@ function App() {
 
                       <div className="task-actions">
                         <button className="btn" onClick={() => handleCategoryEdit(category)} type="button">
-                          Изменить
+                          Change
                         </button>
                         <button
                           className="btn btn-danger"
                           onClick={() => handleCategoryDelete(category.id)}
                           type="button"
                         >
-                          Удалить
+                          Delete
                         </button>
                       </div>
                     </li>
