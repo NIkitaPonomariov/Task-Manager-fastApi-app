@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from pydantic import BaseModel
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,7 +18,7 @@ app.add_middleware(
 class TaskSchema(BaseModel):
     id: str
     title: str
-    complete: bool
+    completed: bool
 
 class TaskCreateSchema(BaseModel):
     title: str
@@ -26,7 +26,7 @@ class TaskCreateSchema(BaseModel):
 
 class TaskUpdateSchema(BaseModel):
     title: str | None = None
-    complete: bool | None = None
+    completed: bool | None = None
 
 
 tasks: list[TaskSchema] = []
@@ -37,9 +37,9 @@ def tasks_reader() -> list[TaskSchema]:
     return tasks
 
 
-@app.post("/tasks")
+@app.post("/tasks", status_code = status.HTTP_201_CREATED)
 def create_task(payload: TaskCreateSchema) -> TaskSchema:
-    new_task = TaskSchema(id=str(uuid4()), title=payload.title,complete=False)
+    new_task = TaskSchema(id=str(uuid4()), title=payload.title,completed=False)
 
     tasks.append(new_task)
     return new_task
@@ -50,5 +50,12 @@ def update_task(task_id: str, payload: TaskUpdateSchema) -> TaskUpdateSchema:
     for task in tasks:
         if task.id == task_id:
             task.title = payload.title if payload.title else task.title
-            task.complete = payload.complete if payload.complete else task.complete
+            task.completed = payload.completed if payload.completed is not None else task.completed
             return task
+        
+
+@app.delete("/tasks/{task_id}", status_code = status.HTTP_204_NO_CONTENT)
+def delete_task(task_id):
+    for task in tasks:
+        if task.id == task_id:
+            tasks.remove(task)
