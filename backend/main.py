@@ -4,20 +4,24 @@ from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-app.middleware(
+
+
+app.add_middleware(
     CORSMiddleware,
-    allow_origins =["http://localhost:3000"],
-    allow_methods = ["*"]
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
 class TaskSchema(BaseModel):
     id: str
-    tittle: str
+    title: str
     complete: bool
 
 class TaskCreateSchema(BaseModel):
-    tittle: str
+    title: str
 
 tasks: list[TaskSchema] = []
 
@@ -27,9 +31,9 @@ def tasks_reader() -> list[TaskSchema]:
     return tasks
 
 
-@app.post("/tasksadd")
+@app.post("/tasks")
 def create_task(payload: TaskCreateSchema) -> TaskSchema:
-    new_task = TaskSchema(id=str(uuid4()), tittle=payload.tittle,complete=False)
+    new_task = TaskSchema(id=str(uuid4()), title=payload.title,complete=False)
 
     tasks.append(new_task)
     return new_task
