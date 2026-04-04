@@ -96,9 +96,12 @@ def delete_task(task_id):
             tasks.remove(task)
 
 
-
+#!!!!
+#create catigories
+#end project
 
 # 1.13.37 <- tommorow start from here 
+
 # create models and code for collection 
 # end this project , made refactoring 
 # puth everything in docker and deploy
