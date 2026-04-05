@@ -3,7 +3,9 @@ from pydantic import BaseModel
 from uuid import uuid4
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, select
-from sqlalchemy.orm import DeclarativeBase, Mapped, sessionmaker 
+from sqlalchemy.orm import DeclarativeBase, Mapped, sessionmaker, mapped_column
+from contextlib import asynccontextmanager
+from sqlalchemy.orm import Session
 
 DATABASE_URL = "postgresql+psycopg://postgres:admin@127.0.0.1:15432/postgres"
 engine = create_engine(DATABASE_URL)
@@ -74,27 +76,30 @@ def tasks_reader(db: Session = Depends(get_db)) -> list[TaskSchema]:
 
 @app.post("/tasks", status_code = status.HTTP_201_CREATED)
 def create_task(payload: TaskCreateSchema, db: Session = Depends(get_db)) -> TaskSchema:
-    new_task = TaskSchema(id=str(uuid4()), title=payload.title,completed=False)
+    new_task = TaskORM(title=payload.title, completed=False)
+    db.add(new_task)
+    db.commit()
+    db.refresh(new_task)
 
-    tasks.append(new_task)
-    return new_task
+    return task_orm_to_model(new_task)
 
 
 @app.patch("/tasks/{task_id}")
-def update_task(task_id: str, payload: TaskUpdateSchema, db: Session = Depends(get_db)) -> TaskUpdateSchema:
-    for task in tasks:
-        if task.id == task_id:
-            task.title = payload.title if payload.title else task.title
-            task.completed = payload.completed if payload.completed is not None else task.completed
-            return task
-        
+def update_task(task_id: str, payload: TaskUpdateSchema, db: Session = Depends(get_db)) -> TaskSchema:
+    task_for_update = db.get(TaskORM, task_id)
+    if payload.title:
+        task_for_update.title = payload.title
+    if payload.completed is not None:
+        task_for_update.completed = payload.completed
+
+    db.commit()
+    return task_orm_to_model(task_for_update)
 
 @app.delete("/tasks/{task_id}", status_code = status.HTTP_204_NO_CONTENT)
-def delete_task(task_id):
-    for task in tasks:
-        if task.id == task_id:
-            tasks.remove(task)
-
+def delete_task(task_id,  db: Session = Depends(get_db)) -> None:
+    task_for_delete = db.get(TaskORM, task_id)
+    db.delete(task_for_delete)
+    db.commit()
 
 #!!!!
 #create catigories
