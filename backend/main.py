@@ -26,21 +26,7 @@ app.add_middleware(
 )
 
 
-class TaskSchema(BaseModel):
-    id: str
-    title: str
-    completed: bool
 
-class TaskCreateSchema(BaseModel):
-    title: str
-
-
-class TaskUpdateSchema(BaseModel):
-    title: str | None = None
-    completed: bool | None = None
-
-
-tasks: list[TaskSchema] = []
 
 
 def get_db():
