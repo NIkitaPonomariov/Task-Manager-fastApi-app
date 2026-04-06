@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.models.base import Base
 from backend.db.session import engine
 
+from backend.api.routers.task import router as task_router
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -13,7 +15,7 @@ async def lifespan(_: FastAPI):
     yield
 
 app = FastAPI(lifespan = lifespan)
-
+app.include_router(router = task_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,5 +24,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-

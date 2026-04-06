@@ -20,9 +20,8 @@ class TaskService:
         return TaskSchema.model_validate(task_orm)
     
     def update_task(self,task_id: str, task_update: TaskUpdateSchema) -> TaskSchema:
-        try:
-            task_for_update = self.task_repository.get_task_by_id(task_id=task_id)
-        except Exception:
+        task_for_update = self.task_repository.get_task_by_id(task_id=task_id)
+        if not task_for_update:
             raise TaskNotFound("task with id={task_id} not found")
         if task_for_update.title:
             task_for_update.title = task_for_update.title
@@ -34,8 +33,7 @@ class TaskService:
 
 
     def delete_task(self,task_id: str) -> None:
-        try:
-            task_for_delete = self.task_repository.get_task_by_id(task_id=task_id)
-        except Exception:
+        task_for_delete = self.task_repository.get_task_by_id(task_id=task_id)
+        if not task_for_delete:
             raise TaskNotFound(f"task with id={task_id} not found")
         self.task_repository.delete(task_for_delete)

@@ -8,6 +8,6 @@ class Settings:
 
 def get_settings() -> Settings:
     return Settings(
-        DATABASE_URL = "postgresql+psycopg://postgres:admin@127.0.0.1:15432/postgres",
+        DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/taskmanager",
         cors_allowd_origin = ["http://localhost:3000"],
     )

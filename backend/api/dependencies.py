@@ -1,5 +1,5 @@
 from backend.services.task import TaskService
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 from backend.db.session import get_db
 from fastapi import Depends
 

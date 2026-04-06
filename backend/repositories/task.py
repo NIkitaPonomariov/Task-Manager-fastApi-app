@@ -16,7 +16,7 @@ class TaskRepository:
     def create_task(self, title: str) -> TaskORM:
         new_task = TaskORM(title=title, completed=False)
         self.db.add(new_task)
-        self.db.commit()
+        return new_task
 
     def delete(self, TaskORM) -> None:
         self.db.delete(TaskORM)
