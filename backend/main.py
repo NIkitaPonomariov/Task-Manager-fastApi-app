@@ -1,24 +1,12 @@
-from fastapi import Depends, FastAPI, status
-from pydantic import BaseModel
-from uuid import uuid4
-from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, select
-from sqlalchemy.orm import DeclarativeBase, Mapped, sessionmaker, mapped_column
 from contextlib import asynccontextmanager
+from fastapi import Depends, FastAPI, status
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-DATABASE_URL = "postgresql+psycopg://postgres:admin@127.0.0.1:15432/postgres"
-engine = create_engine(DATABASE_URL)
-Sessionlocal = sessionmaker(bind=engine)
-
-
-class Base(DeclarativeBase):
-    id: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid4()))
-
-class TaskORM(Base):
-    __tablename__="tasks"
-    title: Mapped[str]
-    completed: Mapped[bool] = mapped_column(default=False)
+from backend.models.base import Base
+from backend.db.session import engine
 
 
 @asynccontextmanager
