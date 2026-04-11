@@ -34,7 +34,7 @@ class CategoryService:
         category_id: str,
         category_update: CategoryUpdateSchema,
     ) -> CategorySchema:
-        category = self.category_repository.get_category_by_id(category_id)
+        category = self.category_repository.get_by_id(category_id)
 
         if not category:
             raise CategoryNotFound(f"category with id={category_id} not found")
@@ -46,7 +46,7 @@ class CategoryService:
         return CategorySchema.model_validate(category)
 
     def delete_category(self, category_id: str) -> None:
-        category = self.category_repository.get_category_by_id(category_id)
+        category = self.category_repository.get_by_id(category_id)
 
         if not category:
             raise CategoryNotFound(f"category with id={category_id} not found")

@@ -9,7 +9,7 @@ from backend.api.dependencies import get_category_services
 
 router = APIRouter(prefix="/categories")
 
-@router.get("/")
+@router.get("")
 def category_reader(
     category_service: CategoryService = Depends(get_category_services)
 ) -> list[CategorySchema]:
