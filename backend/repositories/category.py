@@ -10,7 +10,7 @@ class CategoryRepository:
     def get_all(self) -> list[CategoryORM]:
         return self.db.scalars(select(CategoryORM)).all()
     
-    def get_category_by_id(self, category_id) -> CategoryORM:
+    def get_by_id(self, category_id) -> CategoryORM | None:
         return self.db.get(CategoryORM, category_id)
     
     def create(self, name: str) -> CategoryORM:
@@ -19,4 +19,4 @@ class CategoryRepository:
         return new_category
 
     def delete(self, category: CategoryORM) -> None:
-        self.db.delete(CategoryORM)
+        self.db.delete(category)
