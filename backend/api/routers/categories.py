@@ -15,37 +15,35 @@ def category_reader(
 ) -> list[CategorySchema]:
     return category_service.get_categories()
 
-"""
 
 @router.post("", status_code = status.HTTP_201_CREATED)
-def create_task(
-    payload: TaskCreateSchema,
-    task_service: TaskService = Depends(get_task_servises)
-    ) -> TaskSchema:
+def create_category(
+    payload: CategoryCreateSchema,
+    category_service: CategoryService = Depends(get_category_services)
+    ) -> CategorySchema:
 
-    return task_service.create_task(task_create=payload)
+    return category_service.create_category(payload)
 
-@router.patch("/{task_id}")
-def update_task(
-    task_id: str,
-    payload: TaskUpdateSchema,
-    task_service: TaskService = Depends(get_task_servises)
-    ) -> TaskSchema:
+
+@router.patch("/{category_id}")
+def update_category(
+    category_id: str,
+    payload: CategoryUpdateSchema,
+    category_service: CategoryService = Depends(get_category_services)
+    ) -> CategorySchema:
     try: 
-        return task_service.update_task(task_id=task_id, task_update=payload)
-    except TaskNotFound:
-        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND)
+        return category_service.update_category(category_id=category_id, category_update=payload)
+    except CategoryNotFound:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail="Category not found")
 
-@router.delete("/{task_id}", status_code = status.HTTP_204_NO_CONTENT)
-def delete_task(
-    task_id: str,
-    task_service: TaskService = Depends(get_task_servises)
+
+@router.delete("/{category_id}", status_code = status.HTTP_204_NO_CONTENT)
+def delete_category(
+    category_id: str,
+    category_service: CategoryService = Depends(get_category_services)
     ) -> None:
     try:
-        return task_service.delete_task(task_id=task_id)
-    except TaskNotFound:
-        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND)
+        return category_service.delete_category(category_id=category_id)
+    except CategoryNotFound:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail="Category not found")
 
-
-
-"""
