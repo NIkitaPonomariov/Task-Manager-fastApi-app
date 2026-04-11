@@ -1,3 +1,5 @@
+#here is logic of our app
+
 from sqlalchemy.orm import Session
 from backend.repositories.task import TaskRepository
 from backend.schemas.task import TaskCreateSchema, TaskSchema, TaskUpdateSchema 
